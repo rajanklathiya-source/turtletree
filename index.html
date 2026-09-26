@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Turtle Fractal Tree Visualizer</title>
+  <meta name="description" content="Run Python Turtle recursive fractal tree code directly in your browser with interactive controls and real-time visualization.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top App Navigation -->
+  <header>
+    <div class="logo-area">
+      <div class="logo-icon">🐢</div>
+      <div class="logo-text">
+        <h1>Python Turtle Tree</h1>
+        <span>Fractal Visualizer</span>
+      </div>
+    </div>
+
+    <div class="header-badges">
+      <div class="engine-badge">
+        <div class="status-dot"></div>
+        <span id="engine-label">Canvas Turtle Engine (Python 3)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout -->
+  <main class="app-container">
+    
+    <!-- Left Sidebar: Code & Parameters -->
+    <aside class="sidebar">
+      
+      <!-- Preset Switcher -->
+      <div class="presets-bar" aria-label="Tree Style Presets">
+        <button class="preset-chip active" data-preset="realistic" id="preset-realistic">🌳 Realistic Tree</button>
+        <button class="preset-chip" data-preset="classic" id="preset-classic">📐 Classic Code</button>
+        <button class="preset-chip" data-preset="sakura" id="preset-sakura">🌸 Cherry Blossom</button>
+        <button class="preset-chip" data-preset="autumn" id="preset-autumn">🍁 Autumn Gold</button>
+      </div>
+
+      <nav class="tabs-nav" aria-label="Controls Navigation">
+        <button class="tab-btn active" data-tab="code" id="tab-code-btn">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+          Python Code
+        </button>
+        <button class="tab-btn" data-tab="params" id="tab-params-btn">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66z"/></svg>
+          Tree Parameters
+        </button>
+      </nav>
+
+      <!-- Code Tab -->
+      <section class="tab-content active" id="code-panel">
+        <div class="editor-container">
+          <div class="editor-header">
+            <div class="editor-title">
+              <span>tree.py</span>
+              <span class="editor-tag">Python 3</span>
+            </div>
+            <span>Turtle Graphics</span>
+          </div>
+          <div class="code-wrapper">
+            <textarea id="code-editor" spellcheck="false" aria-label="Python Code Editor"></textarea>
+          </div>
+        </div>
+
+        <div class="action-toolbar" style="grid-template-columns: 1.4fr 1fr;">
+          <button id="run-btn" class="btn btn-primary" title="Start drawing the tree slowly from the beginning">
+            <span>▶ Run Code</span>
+          </button>
+          <button id="pause-btn" class="btn btn-secondary" title="Pause or Resume drawing">
+            <span>⏸ Pause</span>
+          </button>
+        </div>
+
+        <!-- Quick Speed Buttons -->
+        <div style="display: flex; gap: 6px; margin: 2px 0;">
+          <button type="button" class="preset-chip active" id="speed-slow" data-speed="slow" style="flex: 1; justify-content: center;">🐢 Slow</button>
+          <button type="button" class="preset-chip" id="speed-medium" data-speed="medium" style="flex: 1; justify-content: center;">🚶 Normal</button>
+          <button type="button" class="preset-chip" id="speed-fast" data-speed="fast" style="flex: 1; justify-content: center;">⚡ Fast</button>
+        </div>
+
+        <div class="action-toolbar">
+          <button id="reset-btn" class="btn btn-secondary">
+            <span>↺ Clear Canvas</span>
+          </button>
+          <button id="download-btn" class="btn btn-secondary">
+            <span>💾 Save Image</span>
+          </button>
+        </div>
+
+        <!-- Terminal Output -->
+        <div class="param-title">Terminal & Execution Log</div>
+        <div id="console-output" class="console-box" aria-live="polite">[System] Ready to run Python Turtle Tree.</div>
+      </section>
+
+      <!-- Parameters Tab -->
+      <section class="tab-content" id="params-panel">
+        
+        <div class="param-group">
+          <div class="param-title">Tree Realism & Foliage</div>
+          
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; color: var(--text-main);">
+              <input type="checkbox" id="check-taper" checked style="accent-color: var(--accent-green); width: 16px; height: 16px;">
+              <span>Taper Trunk & Branch Thickness</span>
+            </label>
+
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; color: var(--text-main);">
+              <input type="checkbox" id="check-leaves" checked style="accent-color: var(--accent-green); width: 16px; height: 16px;">
+              <span>Draw Foliage / Leaves at Tips</span>
+            </label>
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Leaf / Blossom Size</span>
+              <span id="val-leaf-size" class="slider-val">7px</span>
+            </div>
+            <input type="range" id="param-leaf-size" min="2" max="14" value="7" step="1">
+          </div>
+        </div>
+
+        <div class="param-group">
+          <div class="param-title">Fractal Geometry</div>
+          
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Initial Trunk Length (i)</span>
+              <span id="val-len" class="slider-val">100px</span>
+            </div>
+            <input type="range" id="param-len" min="40" max="180" value="100" step="5">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Branch Angle</span>
+              <span id="val-angle" class="slider-val">28°</span>
+            </div>
+            <input type="range" id="param-angle" min="10" max="60" value="28" step="1">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Branch Scaling Ratio</span>
+              <span id="val-ratio" class="slider-val">0.75</span>
+            </div>
+            <input type="range" id="param-ratio" min="0.5" max="0.85" value="0.75" step="0.01">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Recursion Cutoff Limit</span>
+              <span id="val-cutoff" class="slider-val">10</span>
+            </div>
+            <input type="range" id="param-cutoff" min="5" max="30" value="10" step="1">
+          </div>
+        </div>
+
+        <div class="param-group">
+          <div class="param-title">Styling & Colors</div>
+
+          <div class="color-pickers-grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="color-item">
+              <span>Trunk Base</span>
+              <div class="color-input-wrapper">
+                <input type="color" id="color-trunk" value="#5c3826">
+              </div>
+            </div>
+
+            <div class="color-item">
+              <span>Branches</span>
+              <div class="color-input-wrapper">
+                <input type="color" id="color-branch" value="#8b5a2b">
+              </div>
+            </div>
+
+            <div class="color-item">
+              <span>Foliage / Leaves</span>
+              <div class="color-input-wrapper">
+                <input type="color" id="color-leaf" value="#22c55e">
+              </div>
+            </div>
+
+            <div class="color-item">
+              <span>Fruit / Nodes</span>
+              <div class="color-input-wrapper">
+                <input type="color" id="color-node" value="#f59e0b">
+              </div>
+            </div>
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Trunk Base Width</span>
+              <span id="val-pensize" class="slider-val">10px</span>
+            </div>
+            <input type="range" id="param-pensize" min="1" max="18" value="10" step="1">
+          </div>
+        </div>
+
+        <div class="param-group">
+          <div class="param-title">Animation Speed</div>
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Drawing Animation Speed</span>
+              <span id="val-speed" class="slider-val">60</span>
+            </div>
+            <input type="range" id="param-speed" min="1" max="100" value="60" step="1">
+          </div>
+        </div>
+
+      </section>
+
+    </aside>
+
+    <!-- Right Viewport: Turtle Screen -->
+    <section class="viewport-panel">
+      
+      <!-- Viewport Stats and Toolbar -->
+      <div class="viewport-toolbar">
+        <div class="stats-bar">
+          <span>Branches: <b id="stat-branches">0</b></span>
+          <span>Depth: <b id="stat-depth">0</b></span>
+          <span>Time: <b id="stat-time">0ms</b></span>
+        </div>
+
+        <div class="tool-actions">
+          <button id="zoom-in" class="icon-btn" title="Zoom In">+</button>
+          <button id="zoom-out" class="icon-btn" title="Zoom Out">−</button>
+          <button id="zoom-reset" class="icon-btn" title="Reset View">⟲</button>
+        </div>
+      </div>
+
+      <!-- Canvas Rendering Container -->
+      <div class="canvas-wrapper">
+        <canvas id="tree-canvas"></canvas>
+      </div>
+
+      <!-- Live Status Indicator -->
+      <div class="turtle-overlay-info">
+        <div class="indicator-glow"></div>
+        <span id="turtle-status">Ready</span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js?v=20260927_0230"></script>
+</body>
+</html>
